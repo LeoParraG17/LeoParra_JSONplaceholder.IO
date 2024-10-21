@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Álbumes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            background-color: #ffffff;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .navbar-brand, .nav-link {
+            color: #333 !important;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .nav-link:hover {
+            color: #ff5a5f !important;
+        }
+        .header {
+            color: #333;
+            text-align: center;
+            padding: 50px 0;
+        }
+        .header h1 {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+        .section {
+            padding: 2rem 0;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 2rem;
+        }
+        .section h2 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .section h2 i {
+            margin-right: 10px;
+            color: #ff5a5f;
+        }
+        .table {
+            margin: 2rem auto;
+            width: 100%;
+            max-width: 1000px;
+            background-color: #ffffff;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        .table thead {
+            background-color: #ff5a5f;
+            color: white;
+        }
+        .table th, .table td {
+            padding: 15px;
+            text-align: left;
+        }
+        .table tbody tr {
+            transition: background-color 0.3s ease;
+        }
+        .table tbody tr:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+        .table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+        .card {
+            margin: 1rem 0;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #e0e0e0;
+        }
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .card-body {
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        .message {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 5px;
+            display: none;
+        }
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .result-box {
+            border: 1px solid #ccc;
+            padding: 1rem;
+            margin-top: 1rem;
+            min-height: 50px;
+            background-color: #ffffff;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        }
+        .result-box.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .result-box.hide {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        .alert-custom {
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+            display: none;
+        }
+        .alert-custom.success {
+            background-color: #d4edda;
+            color: #155724;
+            border-left: 5px solid #28a745;
+        }
+        .alert-custom.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-left: 5px solid #dc3545;
+        }
+        .btn i {
+            margin-right: 5px;
+        }
+        .btn-primary, .btn-warning, .btn-danger {
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .btn-primary:hover, .btn-warning:hover, .btn-danger:hover {
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+        .form-control {
+            border-radius: 8px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            transition: border-color 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: #ff5a5f;
+            box-shadow: 0 0 5px rgba(255, 90, 95, 0.5);
+        }
+        footer {
+            background-color: #ffffff;
+            border-top: 1px solid #e0e0e0;
+            color: #333;
+            padding: 1rem 0;
+            text-align: center;
+        }
+        footer a {
+            color: #ff5a5f;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Álbumes</a>
+        </div>
+    </nav>
+
+    <header class="header">
+        <h1>Bienvenido a Álbumes</h1>
+        <p>Gestiona tus álbumes de manera fácil y rápida</p>
+    </header>
+
+    <section id="albums-section" class="section">
+        <div class="container">
+            <h2 class="text-center"><i class="fas fa-music"></i> Álbumes</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Título</th>
+                            </tr>
+                        </thead>
+                        <tbody id="albums"></tbody>
+                    </table>
+                    <button id="toggle-albums" class="btn btn-secondary">Mostrar Todos los Álbumes</button>
+                </div>
+                <div class="col-md-6">
+                    <div id="albums-cards" class="row"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="create-album-section" class="section">
+        <div class="container">
+            <h2 class="text-center"><i class="fas fa-plus-circle"></i> Crear Nuevo Álbum</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="create-album-form">
+                                <div class="mb-3">
+                                    <label for="album-title" class="form-label">Título</label>
+                                    <input type="text" class="form-control" id="album-title" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i>Crear Álbum</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="create-message" class="result-box"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="update-album-section" class="section">
+        <div class="container">
+            <h2 class="text-center"><i class="fas fa-edit"></i> Actualizar Álbum</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="update-album-form">
+                                <div class="mb-3">
+                                    <label for="update-album-id" class="form-label">ID del Álbum</label>
+                                    <input type="number" class="form-control" id="update-album-id" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="update-album-title" class="form-label">Nuevo Título</label>
+                                    <input type="text" class="form-control" id="update-album-title" required>
+                                </div>
+                                <button type="submit" class="btn btn-warning"><i class="fas fa-edit"></i>Actualizar Álbum</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="update-message" class="result-box"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="delete-album-section" class="section">
+        <div class="container">
+            <h2 class="text-center"><i class="fas fa-trash-alt"></i> Eliminar Álbum</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <form id="delete-album-form">
+                                <div class="mb-3">
+                                    <label for="delete-album-id" class="form-label">ID del Álbum</label>
+                                    <input type="number" class="form-control" id="delete-album-id" required>
+                                </div>
+                                <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i>Eliminar Álbum</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="delete-message" class="result-box"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Álbumes. Todos los derechos reservados.</p>
+        <p>
+            <a href="#">Política de Privacidad</a> | 
+            <a href="#">Términos de Servicio</a> | 
+            <a href="#">Contacto</a>
+        </p>
+        <p>
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+        </p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/index.js"></script>
+</body>
+</html>
